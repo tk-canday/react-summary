@@ -1,0 +1,325 @@
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:React</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
+
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
+
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
+
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+				<div style='width:25%;'>
+						<ul id="tree" class="ztree" style='width:100%'>
+
+						</ul>
+				</div>
+        <div id='readme' style='width:70%;margin-left:20%;'>
+          	<article class='markdown-body'>
+            	<h1 id="react-">React 全家桶</h1>
+<ol>
+<li>React 主体</li>
+<li>webpack</li>
+<li>Flex:布局</li>
+<li>React-Route: 路由</li>
+<li>Redux: View层</li>
+<li>Mocha: 测试</li>
+<li>Istanbul: 覆盖率</li>
+</ol>
+<h1 id="jsx">jsx</h1>
+<pre><code>增强型js语法 —— 将html写在js中
+</code></pre><p>注意:</p>
+<ol>
+<li>有且只有一个父元素</li>
+<li>模板字符串
+<code>var div = &lt;div&gt;{ data }&lt;/div&gt;</code></li>
+</ol>
+<h1 id="webpack-">webpack 配置</h1>
+<ol>
+<li>webpack工具下载<ul>
+<li><code>npm install -g webpack</code>   cli环境(脚手架)</li>
+<li><code>npm install -g webpack-dev-server</code>    webpack自带的服务器</li>
+<li><code>npm install webpack --save-dev</code>       webpack本地依赖</li>
+<li><code>npm install webpack-dev-server --save-dev</code>    webpack服务器的本地依赖</li>
+</ul>
+</li>
+<li>依赖库</li>
+<li>babel 转码
+  运行时需要用到的包使用--save，否则使用--save-dev
+  <code>--save-dev</code> 简写 <code>-D</code><ul>
+<li><code>babel-core -D</code>       babel</li>
+<li><code>babel-preset-es2015 -D</code>  对es2015的预设</li>
+<li><code>babel-preset-react -D</code>  对react的预设</li>
+<li><code>babel-loader -D</code>     babel的加载器</li>
+</ul>
+</li>
+<li>react<ul>
+<li><code>react -D</code>      react本身</li>
+<li><code>react-dom -D</code>  react-dom本身</li>
+<li><code>react-hot-loader -D</code>   react热更新加载器</li>
+<li><code>style-loader -D</code>       style加载器</li>
+<li><code>css-loader -D</code>         css加载器(依赖于styleloader)</li>
+</ul>
+</li>
+<li>webpack.config.js<pre><code class="lang-js">module.exports={
+//  入口点
+entry: &#39;./index.js&#39;,    
+// 出口(编译后放入的目录)
+output: {
+ path: __dirname,
+ fileName: &#39;bundle.js&#39;
+},
+// 开发工具(定位错误的)
+devtool:&#39;source-map&#39;,   
+/**
+* 用到的模块
+* exclude 排除的文件
+*/
+module: {
+ loaders: [
+     {test:/\.css$/,loader:&#39;style!css&#39;},
+     {test:/\.js$/,loader:&#39;react-hot!babel&#39;,exclude:/node_modules/},
+ ]
+},
+};
+</code></pre>
+</li>
+<li>.babelrc  babel预设文件<pre><code>{
+presets: [[&#39;es2015&#39;],[&#39;react&#39;]]
+}
+</code></pre></li>
+</ol>
+<h1 id="-component-">组件 (component)</h1>
+<p>##　组件定义</p>
+<pre><code class="lang-js">/**
+*  constructor 初始化状态(构造函数)
+*  super() 继承父类的所有属性和方法(激活的作用)
+*  props数据传递 (子组件只能通过 props 来传递数据)
+*/
+class Comp extends React.Component{
+  constructor(...args){
+    super(...args)
+    this.state={sta:&#39;初始化state&#39;}
+  }
+
+
+  static defaultProps = {prop1:&#39;初始化prop&#39;}
+
+  render () {
+      return &lt;p&gt;
+          一个组件,name属性值是{this.props.name}
+          初始属性是{this.props.prop1}
+        &lt;/p&gt;
+  }
+}
+
+// 使用组件
+ReactDOM.render(
+    &lt;Comp name=&#39;&quot;attr&quot;&#39; /&gt;,
+    document.querySelector(&#39;#box&#39;)   // 容器
+)
+</code></pre>
+<h2 id="-">組件的生命周期</h2>
+<ol>
+<li><code>componentWillMount()</code>        創建之前</li>
+<li><code>componentDidMount()</code>         創建完成(在此处添加监听事件)</li>
+<li><code>componentWillUpdate()</code>       更新之前</li>
+<li><code>componentDidUpdate()</code>        更新完成</li>
+<li><code>componentWillUnmount()</code>      即將銷毀(在此处移除监听事件)</li>
+<li><code>componentWillReceiveProps()</code> 組件參數即将更新</li>
+</ol>
+<h2 id="-node-">组件的节点( Node)</h2>
+<pre><code>可以用来进行原生操作
+</code></pre><ul>
+<li><code>this.refs</code>     节点的数组集合</li>
+<li><code>ref</code>      节点中标识的属性</li>
+</ul>
+<h2 id="-">组件间的通信</h2>
+<h3 id="-">子组件接受父组件的 数据</h3>
+<ol>
+<li>父组件给child设置属性</li>
+<li>自组件:<code>this.props.属性名</code></li>
+</ol>
+<h3 id="-">子组件向上传递数据</h3>
+<ol>
+<li><code>props.中给子组件设置的属性(数据)</code></li>
+<li>父组件:属性所绑定的函数中接受传递来的数据</li>
+</ol>
+<h3 id="context-">Context 属性跨级传递</h3>
+<p>如果组件嵌套太多,组件间逐步传递变的繁琐,此时可以用Context</p>
+<ol>
+<li>祖组件:<pre><code class="lang-js">getChildContext:function() {
+return {
+ // data
+}
+}
+// 传给子孙组件的类型校验
+childContextTypes: {
+// 校验
+}
+</code></pre>
+</li>
+<li>子孙组件
+```js
+contextTypes: {
+// 校验祖组件的属性
+}</li>
+<li>子孙组件使用数据
+<code>this.context.属性</code>
+```</li>
+</ol>
+<h3 id="-propscheck-">属性校验 (propscheck)</h3>
+<p>isRequired: 必须有的属性</p>
+<pre><code class="lang-js">// 静态定义,也可以跟props一样在组件外部定义
+static propTypes = {
+  autoPlay: React.PropTypes.bool.isRequired,
+  maxLoops: React.PropTypes.func.isRequired,
+}
+</code></pre>
+<h3 id="-">属性扩散</h3>
+<pre><code>var propObj={
+  prop1:111,
+  prop2:&#39;hello&#39;,
+  prop3:function(){}
+}
+render () {
+    return &lt;p {...propObj}&gt;相当于把propObj所有属性依次放入p的属性&lt;/p&gt;
+}
+</code></pre><h2 id="-">循环渲染子组件</h2>
+<p><code>key</code>属性: 效率问题,且如果没有这个属性的话不能保证渲染的顺序</p>
+<ol>
+<li>在父亲组件中循环给子组件设置value,属性,key or 子组件中设置属性...</li>
+<li>将子组件存入数组 or 子组件接受父组件的数据</li>
+<li>在父组件中嵌入数组渲染 or 子组件内部map遍历生成元素</li>
+</ol>
+<h2 id="-state-">状态 (state)</h2>
+<p>React 以状态为核心</p>
+<pre><code class="lang-js">/**
+ * 边写边输出
+ * setState(state对象, callback)
+ * onChange  react的事件(驼峰)
+ * this.fn.bind(this) 调用实例的fn方法并绑定给这个元素
+ */
+class State extends React.Component{
+  constructor(...args) {
+      super(...args);
+      this.state = {value: &#39;&#39;};
+  }
+
+  fn(ev){
+      this.setState({
+            value: ev.target.value
+      });
+  }
+
+  render(){
+      return  &lt;div&gt;
+                  &lt;input type=&#39;text&#39; onChange={this.fn.bind(this)} /&gt;  
+                  &lt;span&gt;{ this.state.value }&lt;/span&gt;
+              &lt;/div&gt;;
+    }
+}
+
+// 渲染组件
+ReactDOM.render(
+  &lt;State/&gt;,
+  document.querySelector(&#39;#box&#39;)
+)
+</code></pre>
+<h2 id="-">表单</h2>
+<p>直接在input中设置 <code>value=&#39;value&#39;</code>,<code>checked=true</code>的话,这两个属性是只读的,因为prop不能改变,</p>
+<ul>
+<li>可以使用默认值属性:</li>
+<li><code>defaultValue</code>属性    初始value,可以修改</li>
+<li><code>defaultChecked</code>属性  初始checked,可以修改</li>
+<li>推荐受控表单组件:
+<code>&lt;input value={this.state.value}/&gt;</code>   用state控制表单状态</li>
+</ul>
+<h2 id="-">事件</h2>
+<p>  驼峰命名的事件,例如: <code>onClick</code>,<code>onChange</code>...</p>
+<h3 id="-">事件的绑定</h3>
+<p>给事件处理函数传递额外参数的方式：<code>bind(this, arg1, arg2, ...)</code>
+<code>onClick={this.fn.bind(this)}</code></p>
+<h3 id="-">函数传参</h3>
+<ul>
+<li><code>onClick={this.fn(arg)}</code> 这样传参函数会直接调用</li>
+<li><code>onClick={() =&gt;this.fn.(arg)}</code>  应该像这样,return一个函数</li>
+</ul>
+<h3 id="-">阻止冒泡</h3>
+<p><code>e.nativeEvent.stopImmediatePropagation()</code></p>
+<h1 id="-">显示隐藏动画</h1>
+<ol>
+<li><code>npm install react-addons-css-transition-group -save</code></li>
+<li>在<code>&lt;ReactCssTransitionGroup/&gt;</code>组件中配置属性</li>
+</ol>
+
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>
