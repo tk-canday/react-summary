@@ -101,7 +101,6 @@ class Comp extends React.Component{
     this.state={sta:'初始化state'}
   }
 
-
   static defaultProps = {prop1:'初始化prop'}
 
   render () {
@@ -144,7 +143,9 @@ fn(ev){
 render(){
   return  
     <div>
-	  <input ref='write' type='text' onChange={this.fn.bind(this)} />
+	  <input ref='write' type='text' 
+        onChange={this.fn.bind(this)} 
+      />
 	  <span ref='read' onClick={this.foc.bind(this)}> 
         { this.state.value } 	
       </span>
@@ -511,7 +512,7 @@ let history = createBrowserHistory();
 
   ​
 
-- **<Route path='要匹配的路由'  conponent={ 组件 } ／>**
+- **`<Route path='要匹配的路由'  conponent={ 组件 } ／>`**
 
 - **IndexRoute **    默认路由
 
@@ -538,7 +539,7 @@ let history = createBrowserHistory();
   </Router>
   ```
 
-- **<Link  to='路径'> 会解析成a标签 </Link>**
+- **`<Link  to='路径'> 会解析成a标签 </Link>`**
 
 - **IndexLink**        被渲染后才激活指向的路径，与IndexRoute配合使用
 
