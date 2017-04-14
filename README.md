@@ -26,6 +26,8 @@
 
   `var div = <div>{ data }</div>`
 
+3.   { javascript 代码写在大括号中 }
+
 ---
 
 ## webpack 配置
@@ -151,7 +153,7 @@ componentWillReceiveProps(nextProps) {
 
 > 可以用来使用一些原生的方法
 
-- findDomNode（ref || node）. 返回当前挂载的某个节点
+- findDomNode（ref || node）  返回当前挂载的某个节点
 
 * `this.refs`     节点的数组集合（组件挂载完毕之后才可以使用）
 * `ref`                 节点中标识的属性
@@ -223,8 +225,8 @@ static propTypes = {
 
 #### 问题总结：
 
-1. props不能再组件内修改，哪怕修改前的值与修改后得值一样
-2. 在组件加载过程中，先初始化state，再给props赋值，所以无法在`this.state`中访问props，如果`static defaultProps`的话，应该可以除外，但牵扯到属性传递的问题
+1. props不能再组件内修改
+2. key不属于props
 
 
 
@@ -381,7 +383,7 @@ class Comp extends React.Component{
 }
 ```
 
-2. 每次进行`setState`操作，都会进行组件更新，不论oldValue 与 newValue是否有变化，所以避免在除`componentWillReceiveProps`的周期函数中对state进行操作，可能会形成死循环；
+2. 每次进行`setState`操作，都会进行组件更新，不论oldValue 与 newValue是否有变化，所以避免在除了`componentWillReceiveProps`的周期函数中对state进行操作，可能会形成死循环；
 
 ### 动态渲染子组件
 
@@ -441,7 +443,7 @@ class Ul extends React.Component{
 
 - 受限组件
 
-  直接在input中设置 `value='value'`,`checked=true`,
+  直接在input中设置 `value='value'` , `checked=true`,
 
   但是这两个属性是只读的,在React中已经被赋值，prop不能改变
 
@@ -454,7 +456,7 @@ class Ul extends React.Component{
   `<input value={this.state.value} />`   用state控制表单状态
 
 
-> 问题：这么玩会报错：不能操作不受控的组件。。。。。。。
+> 问题：需要在初始时候定义一个需要绑定的数据，否则初始完成后是undefined，会变成受限组件
 
 
 
