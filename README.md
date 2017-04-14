@@ -120,19 +120,40 @@ ReactDOM.render(
 
 ### 組件的生命周期
 
-1. `componentWillMount()`                    創建之前
-
+1. `componentWillMount()`                    創建之前（建议在这进行异步操作）
 2. `componentDidMount()`                      創建完成(在此处添加监听事件)
 3. `componentWillUpdate()`                  更新之前(可以监视state变化做一些操作)
 4. `componentDidUpdate()`                    更新完成
 5. `componentWillUnmount()`                即將銷毀(在此处**一定要**移除监听事件)
 6. `componentWillReceiveProps()`      組件參數即将更新（接收到新的props时候调用，可以在此时更新state以响应prop变化）
 
+示例：
+
+```Max
+componentWillReceiveProps(nextProps) {
+    if (nextProps.data.count) {
+      this.setState({
+        count : this.props.data.count
+      })
+    }
+  }
+```
+
+
+
+> 问题：
+>
+> 顺序
+>
+> 6.0 用法
+
 ### 组件的节点( Node)
 
 > 可以用来使用一些原生的方法
 
-* `this.refs`     节点的数组集合
+- findDomNode（ref || node）. 返回当前挂载的某个节点
+
+* `this.refs`     节点的数组集合（组件挂载完毕之后才可以使用）
 * `ref`                 节点中标识的属性
 
 ```jsx
@@ -164,6 +185,7 @@ render(){
   - 特殊的属性
     - class   ==>   className
     - for      ==>   htmlFor
+    - dangerouslySetInnerHtml    (会将传入的值，进行执行)
 
 
 - 属性扩散
@@ -198,6 +220,11 @@ static propTypes = {
 ```
 
 #### this.props.children (表示组件的所有子节点)
+
+#### 问题总结：
+
+1. props不能再组件内修改，哪怕修改前的值与修改后得值一样
+2. 在组件加载过程中，先初始化state，再给props赋值，所以无法在`this.state`中访问props，如果`static defaultProps`的话，应该可以除外，但牵扯到属性传递的问题
 
 
 
@@ -255,23 +282,26 @@ class Ul extends React.Component{
 如果组件嵌套太多,组件间逐步传递变的繁琐,此时可以用Context
 1. 祖组件:
 ```js
-getChildContext:function() {
-  return {
-    // data
-  }
+// 传给子孙组件的数据类型校验 @ES6 
+static childContextTypes = {
+    // 属性校验
 }
-// 传给子孙组件的类型校验
-childContextTypes: {
-  // 校验
+
+// 要传的数据
+getChildContext() {
+  return {
+     key: value
+  }
 }
 ```
 2. 子孙组件
 ```js
-contextTypes: {
-  // 校验祖组件的属性
+static contextTypes = {
+  // 校验祖组件的属性 @ES6
 }
-3. 子孙组件使用数据
-`this.context.属性`
+
+// 子孙组件使用数据
+this.context.属性key
 ```
 
 
@@ -295,6 +325,8 @@ this.setState ({
   key: value
 }, callback)
 ```
+
+####  forceUpdate   强制更新组件
 
 #### 示例：
 
@@ -332,26 +364,24 @@ ReactDOM.render(
 )
 ```
 
-#### 问题总结
+#### 问题总结:
 
-1. state中的属性不能直接在setState中进行某些运算操作（比如数组的push），
+1. 在state初始化中访问 props：需要这样：
 
-   需要赋值给一个变量进行操作后再重新在setState中赋值
+此时，组件还未构建出来，需要在arguments里获取props
 
-```jsx
-this.state = {
-  data:[
-    {author:'Pete',text:'我是皮特comment'},
-  ]
+```js
+class Comp extends React.Component{
+  constructor(...args){
+    super(...args)
+    this.state = {
+      count: args.props.count
+    }
+  }
 }
-this.setState({
-  data:this.state.push(....)  // 这么玩会出错，data变成数组的长度，虽然不明原因
-})
 ```
 
-
-
-
+2. 每次进行`setState`操作，都会进行组件更新，不论oldValue 与 newValue是否有变化，所以避免在除`componentWillReceiveProps`的周期函数中对state进行操作，可能会形成死循环；
 
 ### 动态渲染子组件
 
@@ -394,7 +424,7 @@ class Ul extends React.Component{
         <Item 
           key={'key' + i} 
           value={this.state.arr[i]}                                                                               		  />)
-	};
+	}
 
 	return (
       <ul>
@@ -423,6 +453,8 @@ class Ul extends React.Component{
 * 受控表单组件:
   `<input value={this.state.value} />`   用state控制表单状态
 
+
+> 问题：这么玩会报错：不能操作不受控的组件。。。。。。。
 
 
 
@@ -464,7 +496,7 @@ class Ul extends React.Component{
 
 ```
 npm install react-router -S       React Router 核心
-npm install react-router-dom -S   React Router 的DOM绑定（4.0）
+npm install react-router-dom -S   React Router 的DOM绑定（@react-router 4.0）
 ```
 ### 可能需要引得对象
 
