@@ -48,96 +48,111 @@ const odiv = document.querySelector('#box')
  *  onChange  react的事件(驼峰)
  *  this.fn.bind(this) 调用实例的fn方法并绑定给这个元素
  */
-// class State extends React.Component{
-// 	constructor(...args) {
-// 		super(...args);
-// 		this.state = {value: ''};
-// 	}
 
-// 	fn(ev){
-// 		this.setState({
-// 			value: ev.target.value
-// 		});
-// 	}
+class State extends React.Component{
+	constructor(...args) {
+		super(...args);
+		this.state = {value: ''};
+	}
 
-// 	render(){
-// 		return  <div>
-// 					<input type='text' onChange={this.fn.bind(this)} />
-// 					<span>{ this.state.value }</span>
-// 				</div>;
-// 	}
-// }
+	fn(ev){
+    // state版本
+		this.setState({
+			value: ev.target.value
+		},function(){
+      console.log('setState callBack');
+    })
 
-// // 渲染组件
+    // refs版本
+		// this.refs.read.innerText = this.refs.write.value
+	}
 
-// ReactDOM.render(
-// 	<State/>,
-// 	document.querySelector('#box')
-// )
+  foc(){
+    // 点击span，input获取焦点
+    this.refs.write.focus()
+  }
+
+	render(){
+		return  <div name='name'>
+					<input ref='write' type='text' onChange={this.fn.bind(this)} />
+					<span ref='read' onClick={this.foc.bind(this)}>{ this.state.value }</span>
+				</div>;
+	}
+}
+
+// 渲染组件
+
+ReactDOM.render(
+	<State/>,
+	document.querySelector('#box')
+)
+
 
 /**=========================================================================
  * 生命周期
  */
-// class Period extends React.Component{
-// 	// 生命周期 ------------------------------------------------
-// 	componentWillMount () {
-// 		console.group('componentWillMount 创建前状态=======>>');
-//         console.log(this.state);
-// 	}
+ /*
+class Period extends React.Component{
+	// 生命周期 ------------------------------------------------
+	componentWillMount () {
+		console.group('componentWillMount 创建前状态=======>>');
+        console.log(this.state);
+	}
 
-// 	componentDidMount () {
-// 		this.time () 	// 在這個狀態調用時間函數
-// 		console.group('componentDidMount 创建后状态=======>>');
-//         console.log(this.state);
-// 	}
+	componentDidMount () {
+		this.time () 	// 在這個狀態調用時間函數
+		console.group('componentDidMount 创建后状态=======>>');
+        console.log(this.state);
+	}
 
-// 	componentWillUpdate () {
-// 		console.group('componentWillUpdate 更新前状态=======>>');
-//         console.log(this.state);
-// 	}
+	componentWillUpdate () {
+		console.group('componentWillUpdate 更新前状态=======>>');
+        console.log(this.state);
+	}
 
-// 	componentDidUpdate () {
-// 		console.group('componentDidUpdate 更新后状态=======>>');
-//         console.log(this.state);
-// 	}
-// 	conponentWillUnmount () {
-// 		console.group('conponentWillUnmount 銷毀前状态=======>>');
-//         console.log(this.state);
-// 	}
+	componentDidUpdate () {
+		console.group('componentDidUpdate 更新后状态=======>>');
+        console.log(this.state);
+	}
+	conponentWillUnmount () {
+		console.group('conponentWillUnmount 銷毀前状态=======>>');
+        console.log(this.state);
+	}
 
-// 	componentWillReceiveProps () {
-// 		console.group('componentWillReceiveProps 組件參數更新=======>>');
-//         console.log(this.state);
-// 	}
+	componentWillReceiveProps () {
+		console.group('componentWillReceiveProps 組件參數更新=======>>');
+        console.log(this.state);
+	}
 
-// 	constructor(...args) {
-// 		super(...args)
-// 		this.state = {h:0,m:0,s:0}
-// 		var that = this
-// 		var int = setInterval(function(){
-// 			that.time()
-// 			// clearInterval(int)
-// 		}, 1000)
-// 	}
-// // 時間函數 -------------------------------------------------
-// 	time (){
-// 		var date = new Date()
-// 		this.setState({
-// 			h: date.getHours(),
-// 			m: date.getMinutes(),
-// 			s: date.getSeconds(),
-// 		});
-// 	}
+	constructor(...args) {
+		super(...args)
+		this.state = {h:0,m:0,s:0}
+		var that = this
+		var int = setInterval(function(){
+			that.time()
+			// clearInterval(int)
+		}, 1000)
+	}
+// 時間函數 --------------------
+	time (){
+		var date = new Date
+		this.setState({
+			h: date.getHours(),
+			m: date.getMinutes(),
+			s: date.getSeconds(),
+		});
+	}
 
-// 	render () {
-// 		return <p> {this.state.h}:{this.state.m}:{this.state.s} </p>
-// 	}
-// }
+	render () {
+		return <p> {this.state.h}:{this.state.m}:{this.state.s} </p>
+	}
+}
 
-// ReactDOM.render (
-// 	<Period/>,
-// 	document.querySelector('#box')
-// )
+ReactDOM.render (
+	<Period/>,
+	document.querySelector('#box')
+)
+*/
 
 /**========================================================================================
  *  循环输出 (repeat) —— 一个简单的ul列表
@@ -148,50 +163,50 @@ const odiv = document.querySelector('#box')
  *  key 给每个元素绑定唯一的值,保证react复用提高效率
  *  组件间的通信——props实现
  */
-// 子组件
-class Item extends React.Component{
-	constructor (...args) {
-		super(...args)
-    this.num = 5
-	}
-
-	render () {
-    this.props.po(this.num)
-		return <li>{this.props.value}{this.props.name}</li>
-	}
-}
-
-// 父组件
-class Ul extends React.Component{
-	constructor (...args) {
-		super(...args)
-		this.state = {arr:['item1','item2','item3']}
-	}
-
-  fn(num){
-    alert(num)
-  }
-
-	render () {
-		var arrItem = []
-		for (var i = 0; i < this.state.arr.length; i++) {
-			arrItem.push(<Item po={this.fn.bind(this)} key={i} name={this.props.name} value={this.state.arr[i]} />)
-		};
-
-		return (
-      <ul>
-			  {arrItem}
-		  </ul>
-    )
-	}
-}
-
-Ul.defaultProps = {
-  name:'  在外部设置props初始值'
-}
-
-ReactDOM.render(
-	<Ul/>,
-	odiv
-)
+// // 子组件
+// class Item extends React.Component{
+// 	constructor (...args) {
+// 		super(...args)
+//     this.num = 5
+// 	}
+//
+// 	render () {
+//     this.props.po(this.num)
+// 		return <li>{this.props.value}{this.props.name}</li>
+// 	}
+// }
+//
+// // 父组件
+// class Ul extends React.Component{
+// 	constructor (...args) {
+// 		super(...args)
+// 		this.state = {arr:['item1','item2','item3']}
+// 	}
+//
+//   fn(num){
+//     alert(num)
+//   }
+//
+// 	render () {
+// 		var arrItem = []
+// 		for (var i = 0; i < this.state.arr.length; i++) {
+// 			arrItem.push(<Item po={this.fn.bind(this)} key={i} name={this.props.name} value={this.state.arr[i]} />)
+// 		};
+//
+// 		return (
+//       <ul>
+// 			  {arrItem}
+// 		  </ul>
+//     )
+// 	}
+// }
+//
+// Ul.defaultProps = {
+//   name:'  在外部设置props初始值'
+// }
+//
+// ReactDOM.render(
+// 	<Ul/>,
+// 	odiv
+// )
 </script>
