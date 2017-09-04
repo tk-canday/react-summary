@@ -267,7 +267,7 @@ render(){
           {/* 但是我想让 <br/> 渲染为标签，
           使用dangerouslySetInnerHTML属性
           */}
-        	<div dangerouslySetInnerHTML={{_html: this.state.html}}></div>
+        	<div dangerouslySetInnerHTML={{__html: this.state.html}}></div>
         )
       }
       ```
