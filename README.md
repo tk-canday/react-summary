@@ -740,34 +740,34 @@ let history = createBrowserHistory();
 
 
 ## Redux
+1. 使用场景：
+- 某个组件的状态，需要共享
+- 某个状态需要在任何地方都可以拿到
+- 一个组件需要改变全局状态
+- 一个组件需要改变另一个组件的状态
 
-思想：
+> 发生上面情况时，如果不使用 Redux 或者其他状态管理工具，不按照一定规律处理状态的读写，代码很快就会变成一团乱麻。此时需要一种机制，可以在同一个地方查询状态、改变状态、传播状态的变化。
 
-1. web应用是一个状态机，识图与状态一一对应。
-2. 将所有的状态保存到一个对象里
-
-
-
-### Action
-
-> 事件描述与处理 [ obj ]
-
-
+2. 思想：
+- web应用是一个状态机，识图与状态一一对应。
+- 将所有的状态保存到一个对象里
 
 ### Store 容器
 
 > 保存数据的容器，整个应用只能有一个
 
-- 创建：
+- 创建：createStore函数可以接受另一个函数作为参数，返回新生成的 Store 对象。
 
 ```js
-import { cerateStore } from 'redux'
-const store = cerateStore(fn)
+import { cerateStore } from 'redux';
+const store = cerateStore(fn);
+export default store;
 ```
+#### store.getState() 获取此时store数据的快照
+> Redux 规定， 一个 State 对应一个 View。只要 State 相同，View 就相同。看到 State，就知道 View 是什么样子，反之亦然。
 
-- store.dispatch( obj )
-
-  View发出**Action**，接收一个Action对象
+#### store.dispatch( obj )
+> 用户行为触发View发出**Action**，接收一个Action对象
 
 
 ###  State
@@ -776,10 +776,20 @@ const store = cerateStore(fn)
 
 ```js
 import { cerateStore } from 'redux'
-const store = cerateStore(fn)  
+const store = cerateStore(fn)
 
 const state = store.getState()
 ```
 
+### Action
+
+> 事件描述与处理 [ obj ]
+样纸：
+```js
+const action = {
+  type: 'ADD_TODO',  // action的名称，必选
+  payload: 'Learn Redux'
+};
+```
 
 
