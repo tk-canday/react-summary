@@ -141,7 +141,7 @@ ReactDOM.render(
 )
 ```
 #### PureComponent
-> 在React Component的生命周期中，有一个shouldComponentUpdate方法。这个方法默认返回值是true。这意味着就算没有改变组件的props或者state，可能也会导致组件的重绘。这就会导致组件因为不相关数据的改变导致重绘，这极大的降低了React的渲染效率。React中内置的PureComponent组件中创建了默认的shouldComponentUpdate行为。这个默认的shouldComponentUpdate行为会一一比较props和state中所有的属性，只有当其中任意一项发生改变是，才会进行重绘。使用时继承这个组件即可。
+> 在React Component的生命周期中，有一个shouldComponentUpdate方法。这个方法默认返回值是true。这意味着就算没有改变组件的props或者state，可能也会导致组件的重绘。这就会导致组件因为不相关数据的改变导致重绘，这极大的降低了React的渲染效率。React中内置的PureComponent组件中创建了默认的shouldComponentUpdate行为。这个默认的shouldComponentUpdate行为会一一比较props和state中所有的属性，只有当其中任意一项发生改变时（<font color:'red'>注意：这里只是浅比较</font>），才会进行重绘。使用时继承这个组件即可。
 
 ### 組件的生命周期
 
