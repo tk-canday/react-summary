@@ -1,6 +1,6 @@
 [TOC]
 
-#          <center>React学习总结</center>
+#          <center>React使用总结</center>
 
 ## React 全家桶
 
@@ -87,7 +87,7 @@ module.exports={
 
 ## 组件 (component)
 
-### 组件的构造
+### 组件的创建
 
 ```js
 /*   @es6	的写法
@@ -140,6 +140,8 @@ ReactDOM.render(
     document.querySelector('#box')   // 容器
 )
 ```
+#### PureComponent
+> 在React Component的生命周期中，有一个shouldComponentUpdate方法。这个方法默认返回值是true。这意味着就算没有改变组件的props或者state，可能也会导致组件的重绘。这就会导致组件因为不相关数据的改变导致重绘，这极大的降低了React的渲染效率。React中内置的PureComponent组件中创建了默认的shouldComponentUpdate行为。这个默认的shouldComponentUpdate行为会一一比较props和state中所有的属性，只有当其中任意一项发生改变是，才会进行重绘。使用时继承这个组件即可。
 
 ### 組件的生命周期
 
@@ -161,9 +163,17 @@ componentWillReceiveProps(nextProps) {
 
 3. `componentDidMount()`                      组件挂载完成，一个生命周期内只会调用一次(在此处注册监听事件)
 
-4. `shouldComponentUpdate（）`           每次`setState`都会调用此事件判断是否需要从新渲染，默认返回true。
-
-   有两个参数(nextProps ，nextState)
+4. `shouldComponentUpdate（nextProps ，nextState）`  每次`setState`都会调用此事件判断是否需要从新渲染，默认返回true。
+  例：
+  ```jsx
+    shouldComponentUpdate(nextProps, nextState) {
+      if (this.props.option === nextProps.option) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  ```
 
 5. `componentWillUpdate()`                  组件更新之前 (可以监视state变化做一些操作)
 
