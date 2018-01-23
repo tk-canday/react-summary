@@ -868,8 +868,7 @@ const chatReducer = combineReducers({
 * applyMiddleware方法的三个参数，就是三个中间件。有的中间件有次序要求，使用前要查一下文档。
 **/
 import { applyMiddleware, createStore } from 'redux';
-import createLogger from 'redux-logger'; // 这是一个来记录日志的中间件
-const logger = createLogger();
+import logger from 'redux-logger'; // 这是一个来记录日志的中间件
 
 const store = createStore(
   reducer,
