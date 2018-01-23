@@ -879,4 +879,37 @@ const store = createStore(
 ### 5.1 redux-thunk
 > Action Creator 默认返回一个对象，使用redux-thunk中间件，改造store.dispatch，使其可以接受函数作为参数。这样就可以在dispatch的时候进行异步处理。
 
+## 6. react-redux
+> react-redux是redux作者为react封装的库，提供了更多的API，注意，享受这个库带来的便利的同时需要遵循它的组件拆分规范。
+### 6.1 拆分规范
+> React-Redux 将所有组件分成两大类：UI 组件（presentational component）和容器组件（container component）。
+1. UI组件
+- 只负责 UI 的呈现，不带有任何业务逻辑
+- 没有状态（即不使用this.state）
+- 所有数据都由参数（**this.props**）提供
+- 不使用任何 Redux 的 API
+
+2. 容器组件
+- 不负责 UI 的呈现，只负责管理数据和业务逻辑
+- 带有内部状态
+- 使用 Redux 的 API，且容器由react-redux的**connect**方法生成
+
+### 6.2 API
+#### connect
+> 用于生成容器组件
+```js
+import { connect } from 'react-redux'
+
+/**
+* mapStateToProps {func} 将state映射到 UI 组件的参数(props)
+* mapDispatchToProps {func,obj} 将用户对 UI 组件的操作映射成 Action。
+* UIComponent {component} UI组件
+**/
+const ContainerComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UIComponent)
+```
+
+
 
