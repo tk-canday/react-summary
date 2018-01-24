@@ -906,14 +906,14 @@ const store = createStore(
 - 使用 Redux 的 API，且容器由react-redux的**connect**方法生成
 
 ### 6.2 API
-#### connect
+#### 6.2.1 connect
 > 用于生成容器组件
 ```js
 import { connect } from 'react-redux'
 
 /**
-* mapStateToProps {func} 将state映射到 UI 组件的参数(props)
-* mapDispatchToProps {func,obj} 将用户对 UI 组件的操作映射成 Action。
+* mapStateToProps {func，ownProps } 将state映射到 UI 组件的参数(props)
+* mapDispatchToProps {func, obj} 将用户对 UI 组件的操作映射成 Action。
 * UIComponent {component} UI组件
 **/
 const ContainerComponent = connect(
@@ -921,6 +921,76 @@ const ContainerComponent = connect(
   mapDispatchToProps
 )(UIComponent)
 ```
+- mapStateToProps
+```js
+// 返回值作为UI组件的props
+  const mapStateToProps = (state, ownProps) => ({key: computedValue()});
+```
+- mapDispatchToProps
+> mapDispatchToProps 既可以是一个函数，也可以是一个对象
+```js
+// 作为函数，返回一个对象，该对象的每个键值对都是一个映射，定义了 UI 组件的参数怎样发出 Action。
+let mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: () => {
+    dispatch({
+      type: 'SET_VISIBILITY_FILTER',
+      filter: ownProps.filter
+    });
+  },
+  onKeydown: () => {
+    dispatch({
+      type: 'TO_SEARCH',
+    });
+  },
+})
+
+// or 作为一个对象，value为一个Action creator，返回的 Action 会由 Redux 自动发出。
+let mapDispatchToProps = {
+  onClick: (filter) => ({
+      type: 'SET_VISIBILITY_FILTER',
+      filter,
+    });
+  },
+  onKeydown: () => ({
+      type: 'TO_SEARCH',
+    });
+  },
+}
+```
+
+#### 6.2.2 Provider
+> connect方法生成容器组件以后，需要让容器组件拿到state对象，才能生成 UI 组件的参数。
+> 一种解决方法是将state对象作为参数，传入容器组件。但是，这样做比较麻烦，尤其是容器组件可能在很深的层级，一级级将state传下去就很麻烦。
+> React-Redux 提供Provider组件，可以让容器组件拿到state。它的原理是React组件的context属性。
+
+```js
+// 这段代码代码中，Provider在路由外面包了一层，这样一来，路由内的所有子组件就默认都可以拿到state了。
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import { Router, IndexRoute, Route, hashHistory } from 'react-router';
+import todoApp from './reducers'
+import App from './components/App'
+import IndexPage from './components/Index/index.js'
+import HomePage from './components/Home/index.jsx'
+
+let store = createStore(todoApp);
+
+ReactDOM.render(
+    <Provider store={Store}>
+        <Router history={hashHistory}>
+            <Route path="/">
+                <Route component={App}>
+                    <IndexRoute  component={IndexPage} /> 
+                    <Route path="home" component={HomePage}  />
+                </Route>
+            </Route>
+        </Router>
+    </Provider>,
+    document.getElementById('container')
+);
+
+```
+
 
 
 
