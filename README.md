@@ -565,6 +565,17 @@ class Ul extends React.Component{
 
 
 ### 3.9 事件
+> react通过合成事件，屏蔽了不同浏览器的差异；同时为了提升复用性，会使用事件池来复用事件对象(池的概念就是为了提升性能而生的，无论是线程池，数据库连接池，还是前端时间大火的fastify中用到的对象池)，通过事件对象的isPersistent属性来判断，并使用persist方法来使其持久化。
+
+#### 3.9.1 event.persist
+> 为了性能考虑，react中的event对象并不能被异步或当做参数传递，需要通过`event.persist()`方法将其持久化。
+```jsx
+// 在这段代码中，如果没有调用persist方法，打印出的event对象的属性值将是null
+_clickHandler(e) {
+  e.persist();
+  setTimeout(_ => console.log(e));
+}
+```
 
 #### 3.9.1 事件的绑定
 
