@@ -577,7 +577,7 @@ _clickHandler(e) {
 }
 ```
 
-#### 3.9.1 事件的绑定
+#### 3.9.2 事件的绑定
 
 - 驼峰命名的事件,例如: `onClick`,`onChange`...
 
@@ -587,19 +587,19 @@ _clickHandler(e) {
 
   `onClick={this.fn.bind(this)}`
 
-#### 3.9.2 触摸事件
+#### 3.9.3 触摸事件
 
 ​	如果需要在手机或平板等触摸设备上使用 React，需要在渲染所有组件之前，调用 				`React.initializeTouchEvents(true);` 启动触摸事件处理。
 
 - onTouchStart, onTouchMove, onTouchEnd
 - onTouchCancel      touch事件被更高级的事件中断时触发
 
-#### 3.9.3 函数传参
+#### 3.9.4 函数传参
 
 - `onClick={this.fn(arg)}` 这样传参函数会直接调用
 - `onClick={() =>this.fn.(arg)}`  应该像这样,return一个函数
 
-#### 3.9.4 阻止冒泡
+#### 3.9.5 阻止冒泡
 
 `event.nativeEvent.stopImmediatePropagation()`
 
