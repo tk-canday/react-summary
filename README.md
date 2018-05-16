@@ -384,6 +384,7 @@ class Ul extends React.Component{
 // 传给子孙组件的数据类型校验 @ES6 
 static childContextTypes = {
     // 属性校验
+    key: PropTypes.[typeof].[isRequied?]
 }
 
 // 要传的数据
